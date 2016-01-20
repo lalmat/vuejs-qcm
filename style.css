@@ -1,0 +1,55 @@
+body {
+	font-family: sans-serif;
+	font-size:11pt;
+}
+#app {
+	position: relative;
+	width:800px;
+	margin:auto;
+}
+#qcm_loader {
+	position:relative;
+	display:inline-block;
+	width:19%;
+	vertical-align: top;
+}
+#qcm_loader select {
+	width:100%;
+	padding:2px;
+}
+#qcm_loader button {
+	width:100%;
+}
+#qcm_editor {
+	position:relative;
+	display:inline-block;
+	width:80%;
+}
+#qcm_editor-newQstBt {
+	position:absolute;
+	top:0px;
+	right:0px;
+}
+.qcm_qstList {
+	width:100%;
+}
+.qcm_qstList div {
+	display:inline-block;
+}
+.qcm_qstList .idx {
+	width:20px;
+	text-align:right;
+}
+.qcm_qstList .text {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width:80px;
+}
+.qcm_qstList .action {
+}
+#footer {
+	margin-top:5px;
+	width:100%;
+	text-align:center;
+}

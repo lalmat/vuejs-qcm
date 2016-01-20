@@ -4,56 +4,73 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Super QCM</title>
+        <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="style.css">
         <script src="node_modules/vue/dist/vue.min.js"></script>
     </head>
     <body>
         <div id="app">
           <div id="qcm_loader">
-            <select v-model="qcmId">
+            <select v-model="qcmId" number>
               <option value="">Choisir...</option>
               <option v-for="qcm in qcmAry" value="{{$index}}">{{qcm.title}}</option>
               <button v-on:click="loadQcm">Charger</button>
             </select>
-          </div>
 
-          <div id="qcm_editor">
-            <div id="qcm_editor-header">
-              <input type="text" v-model="qcmAry[qcmId].title">
-            </div>
-            <div id="qcm_editor-pane" v-if="qcmId!=''">
-              <button v-on:click="questionAdd">Nouvelle Question</button>
-              <div v-for="qst in qcmAry[qcmId].qstAry">
+            <div id="qcm_question-list" v-show="qcmSelected">
+              <div v-for="qst in qcmAry[qcmId].qstAry" class="qcm_qstList">
                 <div class="idx">{{$index}}</div>
                 <div class="text">{{qst.texte}}</div>
                 <div class="action">
-                  <button v-on:click="questionAlt($index)">Edit</button>
-                  <button v-on:click="questionDel($index)">Del.</button>
+                  <i class="fa fa-edit"  v-on:click="questionAlt($index)"></i>
+                  <i class="fa fa-trash" v-on:click="questionDel($index)"></i>
                 </div>
               </div>
             </div>
-            <div id="qcm_editor-body" v-if="qcmId!=''&&qstId!=''">
+
+            <div id="footer" v-if="false">
+              <button v-on:click="saveQcm">Sauvegarder le QCM</button>
+            </div>
+          </div>
+
+          <div id="qcm_editor">
+
+            <div id="qcm_editor-header" >
+              Titre du QCM: <input type="text" v-model="qcmAry[qcmId].title">
+            </div>
+
+            <div id="qcm_editor-newQstBt" v-show="qcmSelected">
+              <button v-on:click="questionAdd">Ajouter une Question</button>
+            </div>
+
+            <div id="qcm_editor-body" v-show="qstSelected">
+              Texte de la question: <br /> 
               <textarea v-model="qcmAry[qcmId].qstAry[qstId].texte"></textarea>
-              <hr />
+              <br />
               <button v-on:click="responseAdd(qcmId,qstId)">Nouvelle réponse</button>
-              <div v-if="rspId>0" v-for="rsp in cmAry[qcmId].qstAry[qstId].rspAry">
-                {{rsp.texte}},
-                <span v-if="rsp.isGood">Bonne</span>
-                <span v-if="!rsp.isGood">Mauvaise</span>
-                réponse,
-                {{rsp.pts}} points,
-                <button v-on:click="responseAlt(qcmId, qstId, $index)">Edit</button>
-                <button v-on:click="responseDel(qcmId, qstId, $index)">Del</button>
-              </div>
               <hr />
-              <input type="text" v-model="rspTpl.texte" />
-              <input type="checkbox" v-model="rspTpl.isGood" />
-              <input type="text" v-mode="rspTpl.pts" />
-              <button v-on:click="responseSave(qcmId, qstId, $index)">Enreg.</button>
+              <fieldset>
+                <legend>Réponses possibles:</legend>
+                <div v-show="qstSelected" v-for="rsp in qcmAry[qcmId].qstAry[qstId].rspAry">
+                  {{rsp.texte}},
+                  <span v-show="rsp.isGood">Bonne</span>
+                  <span v-show="!rsp.isGood">Mauvaise</span>
+                  réponse,
+                  {{rsp.nbPts}} points,
+                  <i class="fa fa-edit"  v-on:click="responseAlt($index)"></i>
+                  <i class="fa fa-trash" v-on:click="responseDel($index)"></i>
+                </div>
+              </fieldset>
+              <fieldset v-show="rspSelected">
+                <legend>Editeur de question:</legend>
+                <input id="rsp_text" type="text"     v-model="qcmAry[qcmId].qstAry[qstId].rspAry[rspId].texte" >
+                <input id="rsp_chk"  type="checkbox" v-model="qcmAry[qcmId].qstAry[qstId].rspAry[rspId].isGood">
+                <input id="rsp_pts"  type="text"     v-model="qcmAry[qcmId].qstAry[qstId].rspAry[rspId].nbPts">
+              </fieldset>
+              
             </div>
           </div>
         </div>
-        <button v-on:click="saveQcm">Sauvegarder le QCM</button>
         <script src="main.js"></script>
     </body>
 </html>
