@@ -11,6 +11,7 @@
         <div id="app">
           <div id="qcm_loader">
             <select v-model="qcmId">
+              <option value="">Choisir...</option>
               <option v-for="qcm in qcmAry" value="{{$index}}">{{qcm.title}}</option>
               <button v-on:click="loadQcm">Charger</button>
             </select>
@@ -19,23 +20,23 @@
           <div id="qcm_editor">
             <div id="qcm_editor-header">
               <input type="text" v-model="qcmAry[qcmId].title">
-              <button v-on:click="questionAdd">Nouvelle Question</button>
             </div>
-            <div id="qcm_editor-pane">
+            <div id="qcm_editor-pane" v-if="qcmId!=''">
+              <button v-on:click="questionAdd">Nouvelle Question</button>
               <div v-for="qst in qcmAry[qcmId].qstAry">
                 <div class="idx">{{$index}}</div>
-                <div class="text">{{texte}}</div>
+                <div class="text">{{qst.texte}}</div>
                 <div class="action">
-                  <button v-on:click="questionAlt(qcmId, $index)">Edit</button>
-                  <button v-on:click="questionDel(qcmId, $index)">Del.</button>
+                  <button v-on:click="questionAlt($index)">Edit</button>
+                  <button v-on:click="questionDel($index)">Del.</button>
                 </div>
               </div>
             </div>
-            <div id="qcm_editor-body">
+            <div id="qcm_editor-body" v-if="qcmId!=''&&qstId!=''">
               <textarea v-model="qcmAry[qcmId].qstAry[qstId].texte"></textarea>
               <hr />
               <button v-on:click="responseAdd(qcmId,qstId)">Nouvelle réponse</button>
-              <div v-for="rsp in cmAry[qcmId].qstAry[qstId].rspAry">
+              <div v-if="rspId>0" v-for="rsp in cmAry[qcmId].qstAry[qstId].rspAry">
                 {{rsp.texte}},
                 <span v-if="rsp.isGood">Bonne</span>
                 <span v-if="!rsp.isGood">Mauvaise</span>
