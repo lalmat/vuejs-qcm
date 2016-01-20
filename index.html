@@ -1,13 +1,58 @@
-<!<!doctype html>
+<!doctype html>
 <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Super QCM</title>
         <link rel="stylesheet" href="style.css">
+        <script src="node_modules/vue/dist/vue.min.js"></script>
     </head>
     <body>
-        
+        <div id="app">
+          <div id="qcm_loader">
+            <select v-model="qcmId">
+              <option v-for="qcm in qcmAry" value="{{$index}}">{{qcm.title}}</option>
+              <button v-on:click="loadQcm">Charger</button>
+            </select>
+          </div>
+
+          <div id="qcm_editor">
+            <div id="qcm_editor-header">
+              <input type="text" v-model="qcmAry[qcmId].title">
+              <button v-on:click="questionAdd">Nouvelle Question</button>
+            </div>
+            <div id="qcm_editor-pane">
+              <div v-for="qst in qcmAry[qcmId].qstAry">
+                <div class="idx">{{$index}}</div>
+                <div class="text">{{texte}}</div>
+                <div class="action">
+                  <button v-on:click="questionAlt(qcmId, $index)">Edit</button>
+                  <button v-on:click="questionDel(qcmId, $index)">Del.</button>
+                </div>
+              </div>
+            </div>
+            <div id="qcm_editor-body">
+              <textarea v-model="qcmAry[qcmId].qstAry[qstId].texte"></textarea>
+              <hr />
+              <button v-on:click="responseAdd(qcmId,qstId)">Nouvelle réponse</button>
+              <div v-for="rsp in cmAry[qcmId].qstAry[qstId].rspAry">
+                {{rsp.texte}},
+                <span v-if="rsp.isGood">Bonne</span>
+                <span v-if="!rsp.isGood">Mauvaise</span>
+                réponse,
+                {{rsp.pts}} points,
+                <button v-on:click="responseAlt(qcmId, qstId, $index)">Edit</button>
+                <button v-on:click="responseDel(qcmId, qstId, $index)">Del</button>
+              </div>
+              <hr />
+              <input type="text" v-model="rspTpl.texte" />
+              <input type="checkbox" v-model="rspTpl.isGood" />
+              <input type="text" v-mode="rspTpl.pts" />
+              <button v-on:click="responseSave(qcmId, qstId, $index)">Enreg.</button>
+            </div>
+          </div>
+        </div>
+        <button v-on:click="saveQcm">Sauvegarder le QCM</button>
         <script src="main.js"></script>
     </body>
 </html>
